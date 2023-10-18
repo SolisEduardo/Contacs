@@ -71,6 +71,10 @@ class Repository @Inject constructor(private val service: Service, private val d
         return response.toDomain()
 
     }
+
+    suspend fun updateUser(id_user: Int, firstName: String, lastName: String, email: String){
+        dao.updateUser(id =id_user,firstName = firstName, lastName = lastName, email = email)
+    }
 }
 
 

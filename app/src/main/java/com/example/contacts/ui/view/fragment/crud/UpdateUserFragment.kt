@@ -1,6 +1,7 @@
 package com.example.contacts.ui.view.fragment.crud
 
 import android.os.Bundle
+import android.provider.Settings.Global
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,7 +11,9 @@ import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.example.contacts.R
 import com.example.contacts.databinding.FragmentUpdateUserBinding
+import com.example.contacts.domain.model.User
 import com.example.contacts.ui.viewModel.search.SearchViewModel
+import com.example.contacts.ui.viewModel.update.UpdateUserViewModel
 import com.example.contacts.utils.ConstantsUser
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -35,6 +38,7 @@ class UpdateUserFragment : Fragment() {
     private var id_user : Int =0
 
     private val searchViewModel : SearchViewModel by viewModels()
+    private val updateUserViewModel : UpdateUserViewModel by viewModels()
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -72,6 +76,14 @@ class UpdateUserFragment : Fragment() {
                 Glide.with(activity!!).load(searchViewModel.searchUser(id_user).avatar).into(binding.imageView)
             }*/
             Log.i("INFO", searchViewModel.searchUser(id_user).toString())
+        }
+        binding.buttonUpdate.setOnClickListener {
+            GlobalScope.launch {
+                val userUpdate = User(binding.editTextLastName.text.toString(),id_user,searchViewModel.searchUser(id_user).avatar,binding.editTextFirtName.text.toString(),binding.editTextEmail.text.toString())
+                updateUserViewModel.updateUser(id_user = id_user, firstName = binding.editTextFirtName.text.toString(), lastName = binding.editTextLastName.text.toString(), email = binding.editTextEmail.text.toString() )
+            }
+            requireActivity().supportFragmentManager.popBackStack()
+
         }
 
 
