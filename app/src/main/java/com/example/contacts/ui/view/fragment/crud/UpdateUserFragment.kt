@@ -6,10 +6,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import com.bumptech.glide.Glide
 import com.example.contacts.R
 import com.example.contacts.databinding.FragmentUpdateUserBinding
+import com.example.contacts.ui.viewModel.search.SearchViewModel
 import com.example.contacts.utils.ConstantsUser
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,6 +33,8 @@ class UpdateUserFragment : Fragment() {
     private var _binding : FragmentUpdateUserBinding? = null
     private val binding get() = _binding!!
     private var id_user : Int =0
+
+    private val searchViewModel : SearchViewModel by viewModels()
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -52,6 +60,18 @@ class UpdateUserFragment : Fragment() {
         val arg= this.arguments
         if (arg!=null){
             id_user = arg.getInt(ConstantsUser.ID_USER)
+        }
+        GlobalScope.launch(Dispatchers.IO) {
+            binding.editTextFirtName.setText(searchViewModel.searchUser(id_user).firstName)
+            binding.editTextLastName.setText(searchViewModel.searchUser(id_user).lastName)
+            binding.editTextEmail.setText(searchViewModel.searchUser(id_user).email)
+           /* if (searchViewModel.searchUser(id_user).avatar == ""){
+                Glide.with(activity!!).load(R.drawable.ic_launcher_foreground).into(binding.imageView)
+            }
+            else{
+                Glide.with(activity!!).load(searchViewModel.searchUser(id_user).avatar).into(binding.imageView)
+            }*/
+            Log.i("INFO", searchViewModel.searchUser(id_user).toString())
         }
 
 

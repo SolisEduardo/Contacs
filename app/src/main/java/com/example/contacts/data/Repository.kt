@@ -65,6 +65,12 @@ class Repository @Inject constructor(private val service: Service, private val d
     suspend fun insertUserForMe(userEntities: UserEntities) {
         dao.insertNotes(userEntities)
     }
+
+    suspend fun searchUser(id_user: Int) :User{
+       val response= dao.searchUser(id_user)
+        return response.toDomain()
+
+    }
 }
 
 
