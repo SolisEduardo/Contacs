@@ -6,7 +6,10 @@ import androidx.fragment.app.FragmentTransaction
 import com.example.contacts.R
 import com.example.contacts.databinding.ActivityMainBinding
 import com.example.contacts.ui.view.fragment.LoginFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding :ActivityMainBinding
     private val fragment = LoginFragment()

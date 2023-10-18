@@ -5,7 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import com.example.contacts.R
+import com.example.contacts.databinding.FragmentCreateUserBinding
+import com.example.contacts.domain.model.User
+import com.example.contacts.ui.viewModel.create.CreateUserViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -17,7 +25,14 @@ private const val ARG_PARAM2 = "param2"
  * Use the [CreateUserFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+@AndroidEntryPoint
 class CreateUserFragment : Fragment() {
+
+    private var _binding: FragmentCreateUserBinding? = null
+    private val binding get() = _binding!!
+
+    private val createUserViewModel: CreateUserViewModel by viewModels()
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -34,8 +49,33 @@ class CreateUserFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_user, container, false)
+        _binding = FragmentCreateUserBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.buttonAdd.setOnClickListener {
+            val userCreate = User(
+                lastName = binding.editTextLastName.text.toString(),
+                avatar = "",
+                firstName = binding.editTextFirtName.text.toString(),
+                email = binding.editTextEmail.text.toString(),
+                id = ramNu()
+            )
+            GlobalScope.launch {
+                createUserViewModel.insertUser(userCreate)
+            }
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+    }
+    fun ramNu(): Int {
+        return Random.nextInt(20, 101) // Genera un número entre 20 (inclusive) y 101 (exclusivo)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     companion object {
