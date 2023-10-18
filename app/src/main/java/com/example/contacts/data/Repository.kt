@@ -34,19 +34,6 @@ class Repository @Inject constructor(private val service: Service, private val d
     //List
     suspend fun getAllUserFromApi(): List<User> {
         val response = service.getUser()
-        /*  var model = ArrayList<DataItem>()
-          for (i in response.data!!.iterator()) {
-              if (i != null) {
-                  // listOf = mutableListOf(i.copy(lastName = i.lastName.toString(),id = i.id,avatar = i.avatar, firstName = i.firstName,email = i.email))
-                  println("Hola" + listOf)
-                  listOf.addAll(listOf(i))
-
-              }
-          }
-          model.addAll(listOf)
-          Log.i("SI?", model.toString())*/
-
-
         return response.data!!.map {
             it!!.toDomain()
         }
@@ -74,6 +61,10 @@ class Repository @Inject constructor(private val service: Service, private val d
 
     suspend fun updateUser(id_user: Int, firstName: String, lastName: String, email: String){
         dao.updateUser(id =id_user,firstName = firstName, lastName = lastName, email = email)
+    }
+
+    suspend fun deleteUser(id_user: Int){
+        dao.deleteSpecificUser(id = id_user)
     }
 }
 
