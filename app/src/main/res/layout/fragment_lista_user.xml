@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".ui.view.fragment.crud.ListaUserFragment">
+    <!-- EditText en la parte superior -->
+
+    <EditText
+        android:id="@+id/txtSearch"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:background="@drawable/edittext_border"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Ingrese texto aquí" />
+
+    <!-- FrameLayout para superponer el ProgressBar -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/txtSearch">
+
+        <!-- RecyclerView debajo del EditText -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_person"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/card_presentation"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="1"/>
+
+        <!-- ProgressBar en el centro -->
+        <ProgressBar
+            android:id="@+id/progressDialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        android:src="@drawable/baseline_search_24"/>
+
+</RelativeLayout>

@@ -1,4 +1,4 @@
-package com.example.contacts.ui.view.activity
+package com.example.contacts.ui.view.activity.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
