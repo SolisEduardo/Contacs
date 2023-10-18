@@ -13,6 +13,7 @@ import com.example.contacts.R
 import com.example.contacts.adapter.UserListAdapter
 import com.example.contacts.databinding.FragmentListaUserBinding
 import com.example.contacts.ui.viewModel.list.UserListViewModel
+import com.example.contacts.utils.ConstantsUser.ID_USER
 import dagger.hilt.android.AndroidEntryPoint
 
 // TODO: Rename parameter arguments, choose names that match
@@ -36,6 +37,9 @@ class ListaUserFragment : Fragment() {
     private lateinit var  adapterPerson : UserListAdapter
 
     private val fragment = CreateUserFragment()
+
+    private val fragmentUpdate = UpdateUserFragment()
+    private val bundle = Bundle()
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -62,13 +66,13 @@ class ListaUserFragment : Fragment() {
 
         adapterPerson = UserListAdapter(requireContext(),){
             Log.i(TAG,it.toString())
-           /* bundle.putInt(ID_USER.toString(),it)
+            bundle.putInt(ID_USER,it)
             fragmentUpdate.arguments = bundle
             val ft: FragmentTransaction = activity?.supportFragmentManager!!.beginTransaction()
             // fragmentUpdate.arguments = bundle
             ft.replace(R.id.frameUser, fragmentUpdate, "fragment_create_user")
             ft.addToBackStack(null)
-            ft.commit()*/
+            ft.commit()
         }
         binding.recyclerPerson.adapter = adapterPerson
         listUserViewModel.getUser.observe(this) {

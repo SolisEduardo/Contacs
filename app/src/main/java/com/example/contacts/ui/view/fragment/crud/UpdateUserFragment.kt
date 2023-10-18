@@ -1,11 +1,15 @@
 package com.example.contacts.ui.view.fragment.crud
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.contacts.R
+import com.example.contacts.databinding.FragmentUpdateUserBinding
+import com.example.contacts.utils.ConstantsUser
+import dagger.hilt.android.AndroidEntryPoint
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -17,7 +21,12 @@ private const val ARG_PARAM2 = "param2"
  * Use the [UpdateUserFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+@AndroidEntryPoint
 class UpdateUserFragment : Fragment() {
+
+    private var _binding : FragmentUpdateUserBinding? = null
+    private val binding get() = _binding!!
+    private var id_user : Int =0
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -34,8 +43,24 @@ class UpdateUserFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_update_user, container, false)
+        _binding= FragmentUpdateUserBinding.inflate(inflater,container,false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val arg= this.arguments
+        if (arg!=null){
+            id_user = arg.getInt(ConstantsUser.ID_USER)
+        }
+
+
+        Log.i("INFO",id_user.toString())
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     companion object {
