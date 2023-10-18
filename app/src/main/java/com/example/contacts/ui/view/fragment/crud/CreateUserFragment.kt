@@ -10,6 +10,8 @@ import com.example.contacts.R
 import com.example.contacts.databinding.FragmentCreateUserBinding
 import com.example.contacts.domain.model.User
 import com.example.contacts.ui.viewModel.create.CreateUserViewModel
+import com.example.contacts.utils.DeleteEdiText
+import com.example.contacts.utils.EntityID
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -61,16 +63,14 @@ class CreateUserFragment : Fragment() {
                 avatar = "",
                 firstName = binding.editTextFirtName.text.toString(),
                 email = binding.editTextEmail.text.toString(),
-                id = ramNu()
+                id = EntityID.generateID()
             )
             GlobalScope.launch {
                 createUserViewModel.insertUser(userCreate)
             }
+            DeleteEdiText.deleteText(binding.editTextFirtName, binding.editTextLastName, binding.editTextEmail)
             requireActivity().supportFragmentManager.popBackStack()
         }
-    }
-    fun ramNu(): Int {
-        return Random.nextInt(20, 101) // Genera un número entre 20 (inclusive) y 101 (exclusivo)
     }
 
     override fun onDestroy() {
