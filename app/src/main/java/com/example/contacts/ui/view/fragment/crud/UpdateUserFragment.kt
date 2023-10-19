@@ -80,13 +80,13 @@ class UpdateUserFragment : Fragment() {
             Log.i("INFO", searchViewModel.searchUser(id_user).toString())
         }
         binding.buttonUpdate.setOnClickListener {
-           /* GlobalScope.launch {
+           GlobalScope.launch {
                 val userUpdate = User(binding.editTextLastName.text.toString(),id_user,searchViewModel.searchUser(id_user).avatar,binding.editTextFirtName.text.toString(),binding.editTextEmail.text.toString())
                 updateUserViewModel.updateUser(id_user = id_user, firstName = binding.editTextFirtName.text.toString(), lastName = binding.editTextLastName.text.toString(), email = binding.editTextEmail.text.toString() )
-            }*/
-            GlobalScope.launch {
-                deleteViewModel.deleteUser(id_user)
             }
+            /*GlobalScope.launch {
+                deleteViewModel.deleteUser(id_user)
+            }*/
             requireActivity().supportFragmentManager.popBackStack()
 
         }

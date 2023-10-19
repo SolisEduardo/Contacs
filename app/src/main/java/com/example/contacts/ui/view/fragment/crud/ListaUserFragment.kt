@@ -1,6 +1,7 @@
 package com.example.contacts.ui.view.fragment.crud
 
 import android.os.Bundle
+import android.provider.Settings.Global
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,13 +9,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.contacts.R
+import com.example.contacts.adapter.SwipeController
 import com.example.contacts.adapter.UserListAdapter
 import com.example.contacts.databinding.FragmentListaUserBinding
+import com.example.contacts.domain.model.User
+import com.example.contacts.ui.viewModel.delete.DeleteViewModel
 import com.example.contacts.ui.viewModel.list.UserListViewModel
 import com.example.contacts.utils.ConstantsUser.ID_USER
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,6 +44,8 @@ class ListaUserFragment : Fragment() {
 
     private val TAG: String = ListaUserFragment::class.java.simpleName
     private val listUserViewModel: UserListViewModel by viewModels()
+    private val deleteViewModel : DeleteViewModel by viewModels()
+
     private lateinit var  adapterPerson : UserListAdapter
 
     private val fragment = CreateUserFragment()
@@ -66,30 +78,19 @@ class ListaUserFragment : Fragment() {
 
         adapterPerson = UserListAdapter(requireContext(),){
             Log.i(TAG,it.toString())
-            bundle.putInt(ID_USER,it)
+           /* bundle.putInt(ID_USER,it)
             fragmentUpdate.arguments = bundle
             val ft: FragmentTransaction = activity?.supportFragmentManager!!.beginTransaction()
             // fragmentUpdate.arguments = bundle
             ft.replace(R.id.frameUser, fragmentUpdate, "fragment_create_user")
             ft.addToBackStack(null)
-            ft.commit()
+            ft.commit()*/
         }
         binding.recyclerPerson.adapter = adapterPerson
         listUserViewModel.getUser.observe(this) {
-
-            /* Log.i(TAG, it.toString())
-
-             model.addAll(listOf(it))*/
-
-            /* for (i in it.iterator()) {
-
-                  if (i != null) {
-                      val listaObjetos = mutableListOf(i)
-                      model.addAll(i.toString())
-                  }
-
-              }*/
+            swipeToGesture(recyclerPerson = binding.recyclerPerson, items = it as ArrayList<User>)
             adapterPerson.setData(it)
+
         }
         listUserViewModel.getAllUser()
         binding.fab.setOnClickListener {
@@ -98,6 +99,50 @@ class ListaUserFragment : Fragment() {
             ft.addToBackStack(null)
             ft.commit()
         }
+    }
+
+    private fun swipeToGesture(recyclerPerson : RecyclerView, items : ArrayList<User>){
+        val swipeGesture = object : SwipeController(requireContext()){
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                var actionBtnTapped = false
+
+                try {
+                    when(direction){
+                        ItemTouchHelper.LEFT ->{
+                            //val deleteItem = items[position].id
+                            val deleteItem = items[position].id
+                          /*  GlobalScope.launch {
+
+                                deleteViewModel.deleteUser(deleteItem)
+                                //adapterPerson.updateRecycler(items)
+                            }*/
+                            items.removeAt(position)
+                            adapterPerson.notifyItemRemoved(position)
+
+                            //Log.d("ID seleccionado",deleteItem.toString())
+
+                        }
+                        ItemTouchHelper.RIGHT ->{
+                            val updateUser = items[position].id
+                            bundle.putInt(ID_USER,updateUser)
+                            fragmentUpdate.arguments = bundle
+                            val ft: FragmentTransaction = activity?.supportFragmentManager!!.beginTransaction()
+                            // fragmentUpdate.arguments = bundle
+                            ft.replace(R.id.frameUser, fragmentUpdate, "fragment_create_user")
+                            ft.addToBackStack(null)
+                            ft.commit()
+                        }
+                    }
+                }catch (e : Exception){
+                    e.printStackTrace()
+                }
+            }
+
+        }
+
+        val touchHelper = ItemTouchHelper(swipeGesture)
+        touchHelper.attachToRecyclerView(recyclerPerson)
     }
 
     override fun onDestroy() {

@@ -10,7 +10,7 @@ import com.example.contacts.data.remote.model.response.ListUserResponse
 import com.example.contacts.databinding.CardPresentationBinding
 import com.example.contacts.domain.model.User
 
-class UserListAdapter (private val context: Context, private val userClick: (String) -> Unit) : RecyclerView.Adapter<UserListAdapter.SearchViewHolder>(){
+class UserListAdapter (private val context: Context, private val userClick: (Int) -> Unit) : RecyclerView.Adapter<UserListAdapter.SearchViewHolder>(){
     private var personList: List<User> = emptyList()
     // private var personTest : List<ListUserResponse> = emptyList()
     private lateinit var testPerson : ListUserResponse
@@ -55,7 +55,7 @@ class UserListAdapter (private val context: Context, private val userClick: (Str
             Glide.with(holder.itemView.context).load(persons.avatar).into(binding.imgPerson)
         }
         holder.itemView.setOnClickListener {
-            userClick((persons.email))
+            userClick((persons.id!!))
         }
         /*for ( i in test.data!!.iterator()){
             binding.txtName.text = "${i!!.firstName} ${i!!.lastName}"

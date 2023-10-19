@@ -8,7 +8,7 @@ import com.example.contacts.data.data.entities.UserEntities
 @Dao
 interface UserDao {
     //getAllUser
-    @Query("SELECT * FROM user_table ORDER BY firstName ASC")
+    @Query("SELECT * FROM user_table ORDER BY firstName DESC")
     suspend fun getAllUser():List<UserEntities>
 
     //insert List User
