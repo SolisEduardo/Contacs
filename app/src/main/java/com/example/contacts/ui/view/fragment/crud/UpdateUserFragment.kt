@@ -1,11 +1,27 @@
 package com.example.contacts.ui.view.fragment.crud
 
 import android.os.Bundle
+import android.provider.Settings.Global
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.viewModels
+import com.bumptech.glide.Glide
 import com.example.contacts.R
+import com.example.contacts.databinding.FragmentUpdateUserBinding
+import com.example.contacts.domain.model.User
+import com.example.contacts.ui.viewModel.delete.DeleteViewModel
+import com.example.contacts.ui.viewModel.search.SearchViewModel
+import com.example.contacts.ui.viewModel.update.UpdateUserViewModel
+import com.example.contacts.utils.ConstantsUser
+import com.example.contacts.utils.ValidateEditText
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -17,7 +33,16 @@ private const val ARG_PARAM2 = "param2"
  * Use the [UpdateUserFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+@AndroidEntryPoint
 class UpdateUserFragment : Fragment() {
+
+    private var _binding : FragmentUpdateUserBinding? = null
+    private val binding get() = _binding!!
+    private var id_user : Int =0
+
+    private val searchViewModel : SearchViewModel by viewModels()
+    private val updateUserViewModel : UpdateUserViewModel by viewModels()
+    private val deleteViewModel : DeleteViewModel by viewModels()
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -34,8 +59,49 @@ class UpdateUserFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_update_user, container, false)
+        _binding= FragmentUpdateUserBinding.inflate(inflater,container,false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val arg= this.arguments
+        if (arg!=null){
+            id_user = arg.getInt(ConstantsUser.ID_USER)
+        }
+        GlobalScope.launch(Dispatchers.IO) {
+            binding.editTextFirtName.setText(searchViewModel.searchUser(id_user).firstName)
+            binding.editTextLastName.setText(searchViewModel.searchUser(id_user).lastName)
+            binding.editTextEmail.setText(searchViewModel.searchUser(id_user).email)
+            Log.i("INFO", searchViewModel.searchUser(id_user).toString())
+        }
+        binding.buttonUpdate.setOnClickListener {
+            if (ValidateEditText.areCreateUser(binding.editTextLastName,binding.editTextFirtName, binding.editTextEmail)){
+                if(ValidateEditText.isEditTextInGmailFormat(binding.editTextEmail.text.toString())){
+                    GlobalScope.launch {
+                        val userUpdate = User(binding.editTextLastName.text.toString(),id_user,searchViewModel.searchUser(id_user).avatar,binding.editTextFirtName.text.toString(),binding.editTextEmail.text.toString())
+                        updateUserViewModel.updateUser(id_user = id_user, firstName = binding.editTextFirtName.text.toString(), lastName = binding.editTextLastName.text.toString(), email = binding.editTextEmail.text.toString() )
+                    }
+                    requireActivity().supportFragmentManager.popBackStack()
+                }else{
+                    Toast.makeText(requireContext(),getString(R.string.gmail_invalido),Toast.LENGTH_SHORT).show()
+                }
+
+            }else{
+                Toast.makeText(requireContext(),getString(R.string.editTextBlanck), Toast.LENGTH_SHORT).show()
+            }
+
+
+
+        }
+
+
+        Log.i("INFO",id_user.toString())
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     companion object {

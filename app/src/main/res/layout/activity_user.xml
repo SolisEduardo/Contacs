@@ -5,5 +5,49 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.view.activity.user.UserActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- Toolbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/yellow">
+
+            <!-- TextView en el Toolbar -->
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:text="Título de la Toolbar"
+                android:layout_gravity="start" />
+            <ImageView
+                android:id="@+id/exit_icon"
+                android:layout_width="48dp"
+                android:paddingEnd="8dp"
+                android:layout_height="48dp"
+                android:src="@drawable/baseline_logout_24"
+                android:layout_gravity="end"/>
+
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <!-- FrameLayout debajo del Toolbar -->
+        <FrameLayout
+            android:id="@+id/frameUser"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- Puedes colocar fragmentos, vistas o contenido adicional en el FrameLayout aquí -->
+
+        </FrameLayout>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

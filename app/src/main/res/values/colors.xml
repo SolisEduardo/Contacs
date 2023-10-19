@@ -11,4 +11,5 @@
     <color name="yellow"> #F9C623 </color>
     <color name="blue_start">#0E437E</color>
     <color name="blue_end"> #5C98DB</color>
+    <color name="red_delete">#BA0000</color>
 </resources>
