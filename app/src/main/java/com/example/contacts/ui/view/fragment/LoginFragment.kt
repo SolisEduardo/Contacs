@@ -52,7 +52,7 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val shared : SharedPreferences = this.activity!!.getSharedPreferences(ConstantsUser.sharedLogin,Context.MODE_PRIVATE)
+       val shared : SharedPreferences = this.activity!!.getSharedPreferences(ConstantsUser.sharedLogin,Context.MODE_PRIVATE)
 
         checkLogin(shared)
 
@@ -87,7 +87,7 @@ class LoginFragment : Fragment() {
         }
         binding.txtRegister.setOnClickListener {
             val ft: FragmentTransaction = activity?.supportFragmentManager!!.beginTransaction()
-            ft.replace(R.id.frameUser, fragment, "fragment_create_user")
+            ft.replace(R.id.frameMain, fragment, "fragment_create_user")
             ft.addToBackStack(null)
             ft.commit()
         }

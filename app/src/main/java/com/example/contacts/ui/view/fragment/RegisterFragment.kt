@@ -62,6 +62,7 @@ class RegisterFragment : Fragment() {
             when(it.toString()){
                 "200" -> {
                     rememberUser(shared)
+                   // startActivity(Intent(activity, UserActivity::class.java))
                 }
                 "400" -> {
                     UtilsMessage.showAlertOK(requireContext(),getString(R.string.title_login),getString(R.string.error_login))
