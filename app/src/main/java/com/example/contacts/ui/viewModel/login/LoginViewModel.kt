@@ -35,12 +35,12 @@ class LoginViewModel  @Inject constructor(private val registerUserCase: LoginUse
                 is NetworkState.Success -> {
                     _login.postValue(response.data!!)
                     _isLoading.postValue(false)
-                    _message.postValue("Exito")
+                    _message.postValue("200")
                 }
                 is NetworkState.Error -> {
-                    if (response.response.code() !=200) {
+                    if (response.response.code() == 400) {
 
-                        _message.postValue("user not found")
+                        _message.postValue("400")
                         _isLoading.postValue(false)
                     } else {
                         _isLoading.postValue(true)

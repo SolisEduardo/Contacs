@@ -34,12 +34,11 @@ class RegisterViewModel @Inject constructor(private val registerUserCase: Regist
                 is NetworkState.Success -> {
                     _register.postValue(response.data!!)
                     _isLoading.postValue(false)
-                    _message.postValue("Exito")
+                    _message.postValue("200")
                 }
                 is NetworkState.Error -> {
-                    if (response.response.code() !=200) {
-
-                        _message.postValue(R.string.error_service.toString())
+                    if (response.response.code() ==400) {
+                        _message.postValue("400")
                         _isLoading.postValue(true)
                     } else {
                         _isLoading.postValue(true)

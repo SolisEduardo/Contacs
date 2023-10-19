@@ -22,7 +22,6 @@ import com.example.contacts.ui.viewModel.delete.DeleteViewModel
 import com.example.contacts.ui.viewModel.list.UserListViewModel
 import com.example.contacts.utils.ConstantsUser.ID_USER
 import com.example.contacts.utils.Credenciales
-import com.example.contacts.utils.ValidateEditText
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -81,15 +80,22 @@ class ListaUserFragment : Fragment() {
         binding.recyclerPerson.layoutManager = LinearLayoutManager(requireContext())
 
         adapterPerson = UserListAdapter(requireContext(),){
-            Log.i(TAG,it)
-            if (ValidateEditText.isEditTextInGmailFormat(it)){
-                sendEmail(it)
-            }
+            Log.i(TAG,it.toString())
+           /* bundle.putInt(ID_USER,it)
+            fragmentUpdate.arguments = bundle
+            val ft: FragmentTransaction = activity?.supportFragmentManager!!.beginTransaction()
+            // fragmentUpdate.arguments = bundle
+            ft.replace(R.id.frameUser, fragmentUpdate, "fragment_create_user")
+            ft.addToBackStack(null)
+            ft.commit()*/
+            sendEmail()
         }
         binding.recyclerPerson.adapter = adapterPerson
         listUserViewModel.getUser.observe(this) {
+
             adapterPerson.setData(it)
             swipeToGesture(recyclerPerson = binding.recyclerPerson, items = it as ArrayList<User>)
+
         }
         listUserViewModel.getAllUser()
         binding.fab.setOnClickListener {
@@ -152,7 +158,7 @@ class ListaUserFragment : Fragment() {
         super.onAttach(context)
         appExecutors = AppExecutors()
     }
-    private fun sendEmail(email : String){
+    private fun sendEmail(){
         appExecutors.diskIO().execute {
             val props = System.getProperties()
             props.put("mail.smtp.host", "smtp.gmail.com")
@@ -163,6 +169,7 @@ class ListaUserFragment : Fragment() {
 
             val session =  Session.getInstance(props,
                 object : javax.mail.Authenticator() {
+                    //Authenticating the password
                     override fun getPasswordAuthentication(): PasswordAuthentication {
                         return PasswordAuthentication(Credenciales.EMAIL, Credenciales.PASSWORD)
                     }
@@ -171,15 +178,16 @@ class ListaUserFragment : Fragment() {
             try {
                 //Creating MimeMessage object
                 val mm = MimeMessage(session)
+                val emailId = "eduardo.angel.solis@gmail.com"
                 //Setting sender address
                 mm.setFrom(InternetAddress(Credenciales.EMAIL))
                 //Adding receiver
                 mm.addRecipient(Message.RecipientType.TO,
-                    InternetAddress(email))
+                    InternetAddress(emailId))
                 //Adding subject
-                mm.subject = "Prueba Email"
+                mm.subject = "Your mail's subject."
                 //Adding message
-                mm.setText("Este es un correo de prueba")
+                mm.setText("Your mail body.")
 
                 //Sending email
                 Transport.send(mm)

@@ -23,6 +23,11 @@ class UserListAdapter (private val context: Context, private val userClick: (Str
         this.personList = list
         notifyDataSetChanged()
     }
+    fun remoteUser(list : ArrayList<User>, position: Int){
+        list.remove(list[position])
+        this.personList = list
+        notifyItemRemoved(position)
+    }
 
     interface SwipeListener {
         fun onItemSwipedLeft(item: User) // Acción de swipe hacia la izquierda
