@@ -29,9 +29,9 @@ class RegisterFragment : Fragment() {
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
 
-    private val registerViewModel : RegisterViewModel by viewModels()
+    private val registerViewModel: RegisterViewModel by viewModels()
 
-    private val TAG :String = RegisterFragment::class.java.simpleName
+    private val TAG: String = RegisterFragment::class.java.simpleName
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,36 +43,51 @@ class RegisterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val shared : SharedPreferences = this.activity!!.getSharedPreferences(ConstantsUser.sharedLogin,
-            Context.MODE_PRIVATE)
+        val shared: SharedPreferences = this.activity!!.getSharedPreferences(
+            ConstantsUser.sharedLogin,
+            Context.MODE_PRIVATE
+        )
         binding.buttonRegister.setOnClickListener {
-            if (ValidateEditText.areEditTextsNotEmpty(binding.editTextUsername, binding.editTextPassword)){
-                if (ValidateEditText.isEditTextInGmailFormat(binding.editTextUsername.text.toString())){
-                    val register = RegisterRequest(email = binding.editTextUsername.text.toString(), password = binding.editTextPassword.text.toString())
-                    registerViewModel.registerUser(register)
-                }
-                else{
-                    Toast.makeText(requireContext(),getString(R.string.gmail_invalido),Toast.LENGTH_SHORT).show()
-                }
-            }else{
-                Toast.makeText(requireContext(),getString(R.string.editTextBlanck), Toast.LENGTH_SHORT).show()
+            if (ValidateEditText.areEditTextsNotEmpty(
+                    binding.editTextUsername,
+                    binding.editTextPassword
+                )
+            ) {
+
+                val register = RegisterRequest(
+                    email = binding.editTextUsername.text.toString(),
+                    password = binding.editTextPassword.text.toString()
+                )
+                registerViewModel.registerUser(register)
+
+
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.editTextBlanck),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
-        registerViewModel.message.observe(this){
-            when(it.toString()){
+        registerViewModel.message.observe(this) {
+            when (it.toString()) {
                 "200" -> {
                     rememberUser(shared)
-                   // startActivity(Intent(activity, UserActivity::class.java))
+                    // startActivity(Intent(activity, UserActivity::class.java))
                 }
                 "400" -> {
-                    UtilsMessage.showAlertOK(requireContext(),getString(R.string.title_login),getString(R.string.error_login))
+                    UtilsMessage.showAlertOK(
+                        requireContext(),
+                        getString(R.string.title_login),
+                        getString(R.string.error_login)
+                    )
                 }
             }
         }
-        registerViewModel.register.observe(this){registerResponse->
-            Log.i(TAG,registerResponse.toString())
+        registerViewModel.register.observe(this) { registerResponse ->
+            Log.i(TAG, registerResponse.toString())
         }
-        registerViewModel.isLoading.observe(this){
+        registerViewModel.isLoading.observe(this) {
             binding.progressDialog.isVisible = it
         }
     }
@@ -80,11 +95,11 @@ class RegisterFragment : Fragment() {
     private fun rememberUser(shared: SharedPreferences) {
         val email = binding.editTextUsername.text.toString()
         val password = binding.editTextPassword.text.toString()
-        with(shared.edit()){
-            putString(ConstantsUser.emailLogin,email)
-            putString(ConstantsUser.passwordLogin,password)
-            putString(ConstantsUser.activeLogin,"true")
-            putString(ConstantsUser.rememberLogin,"true")
+        with(shared.edit()) {
+            putString(ConstantsUser.emailLogin, email)
+            putString(ConstantsUser.passwordLogin, password)
+            putString(ConstantsUser.activeLogin, "true")
+            putString(ConstantsUser.rememberLogin, "true")
             apply()
         }
         startActivity(Intent(activity, UserActivity::class.java))
