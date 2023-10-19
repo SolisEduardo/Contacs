@@ -5,4 +5,15 @@
     <string name="text_empty"> No se pueden dejar espacios en blanco </string>
     <string name="error_service"> Note: Only defined users succeed registration </string>
     <string name="user_not_found">user not found</string>
+    <string name="emojis">No se permiten emojis</string>
+    <string name="editTextBlanck">No dejar espacios en blanco</string>
+    <string name="error_login"> Missing password</string>
+    <string name="title_login">Error Login</string>
+    <string name="gmail_invalido">El correo debe de ser gmail</string>
+
+    <string name="Gmail"> Gmail</string>
+    <string name="message_gmail">No se puede enviar un correo por que no tiene el formato correcto </string>
+    <string name="delete"> Eliminar </string>
+    <string name="delete_message"> ¿Desea eliminar el usuario?</string>
+    <string name="send_gmail"> Correo enviado</string>
 </resources>

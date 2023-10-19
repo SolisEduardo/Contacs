@@ -7,6 +7,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -22,6 +25,7 @@ import com.example.contacts.ui.viewModel.delete.DeleteViewModel
 import com.example.contacts.ui.viewModel.list.UserListViewModel
 import com.example.contacts.utils.ConstantsUser.ID_USER
 import com.example.contacts.utils.Credenciales
+import com.example.contacts.utils.UtilsMessage
 import com.example.contacts.utils.ValidateEditText
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
@@ -84,6 +88,11 @@ class ListaUserFragment : Fragment() {
             Log.i(TAG,it)
             if (ValidateEditText.isEditTextInGmailFormat(it)){
                 sendEmail(it)
+                Toast.makeText(requireContext(),getString(R.string.send_gmail),Toast.LENGTH_SHORT).show()
+            }
+            else{
+                UtilsMessage.showAlertOK(requireContext(),getString(R.string.Gmail),getString(R.string.message_gmail))
+
             }
         }
         binding.recyclerPerson.adapter = adapterPerson
@@ -98,23 +107,46 @@ class ListaUserFragment : Fragment() {
             ft.addToBackStack(null)
             ft.commit()
         }
+        searchUser()
+    }
+    private fun searchUser(){
+        binding.txtSearch.addTextChangedListener {filter->
+            listUserViewModel.getUser.observe(this){item->
+                val items = item.filter {
+                    it.firstName.lowercase().contains(filter.toString().lowercase())
+                }
+                adapterPerson.updateRecycler(items)
+            }
+        }
     }
 
     private fun swipeToGesture(recyclerPerson : RecyclerView, items : ArrayList<User>){
         val swipeGesture = object : SwipeController(requireContext()){
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-                var actionBtnTapped = false
-
                 try {
                     when(direction){
                         ItemTouchHelper.LEFT ->{
                             //val deleteItem = items[position].id
                             val deleteItem = items[position].id
-                            GlobalScope.launch {
+                            val builder = AlertDialog.Builder(requireContext())
+                            builder.setTitle(getString(R.string.delete))
+                            builder.setMessage(getString(R.string.delete_message))
+                            builder.setPositiveButton("Aceptar") { dimiss, _ ->
+                                GlobalScope.launch {
+                                    deleteViewModel.deleteUser(deleteItem)
+                                }
+                                adapterPerson.remoteUser(items,position)
+                            }
+                            builder.setNegativeButton("Cancelar") { dimiss, _ ->
+                                dimiss.dismiss()
+                            }
+                            val alertDialog = builder.create()
+                            alertDialog.show()
+                            /*GlobalScope.launch {
                                 deleteViewModel.deleteUser(deleteItem)
                             }
-                            adapterPerson.remoteUser(items,position)
+                            adapterPerson.remoteUser(items,position)*/
                           /*  GlobalScope.launch {
 
                                 deleteViewModel.deleteUser(deleteItem)

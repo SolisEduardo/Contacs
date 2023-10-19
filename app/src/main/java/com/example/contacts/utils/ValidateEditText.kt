@@ -10,6 +10,13 @@ object ValidateEditText {
 
         return text1.isNotEmpty() && text2.isNotEmpty()
     }
+    fun areCreateUser(editText1: EditText, editText2: EditText,editText3: EditText): Boolean {
+        val text1 = editText1.text.toString().trim()
+        val text2 = editText2.text.toString().trim()
+        val text3 = editText3.text.toString().trim()
+
+        return text1.isNotEmpty() && text2.isNotEmpty() && text3.isNotEmpty()
+    }
     fun doesNotContainEmoji(editText: EditText): Boolean {
         val text = editText.text.toString()
         val regex = Regex(".*[\\uD83C-\\uDBFF\\uDC00-\\uDFFF].*")

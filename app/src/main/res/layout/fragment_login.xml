@@ -47,7 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@drawable/blue_border"
-            android:hint="Nombre de usuario"
+            android:hint="correo"
             android:textColorHint="#5C98DB"
             android:padding="8dp"
             android:drawablePadding="8dp"
