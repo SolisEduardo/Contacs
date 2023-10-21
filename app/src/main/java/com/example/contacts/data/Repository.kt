@@ -11,6 +11,7 @@ import com.example.contacts.data.remote.model.response.RegisterResponse
 import com.example.contacts.data.remote.network.Service
 import com.example.contacts.domain.model.User
 import com.example.contacts.domain.model.toDomain
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class Repository @Inject constructor(private val service: Service, private val dao: UserDao) {

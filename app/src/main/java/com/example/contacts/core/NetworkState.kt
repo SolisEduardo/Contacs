@@ -1,5 +1,6 @@
 package com.example.contacts.core
 
+import okhttp3.ResponseBody
 import retrofit2.Response
 
 sealed class NetworkState<out T> {

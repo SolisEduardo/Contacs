@@ -75,7 +75,7 @@ class LoginFragment : Fragment() {
                     rememberUser(shared)
                 }
                 "400" -> {
-                    UtilsMessage.showAlertOK(requireContext(),getString(R.string.title_login),getString(R.string.error_login))
+                    UtilsMessage.showAlertOK(requireContext(),getString(R.string.title_login),getString(R.string.user_not_found))
                 }
             }
         }

@@ -47,17 +47,6 @@ class Service @Inject constructor(private val api : ApiService) {
     suspend fun getUser(): ListUserResponse {
         val response = api.listUser(2)
         Log.i(TAG, response.code().toString())
-
         return response.body()!!
-        /* return if (response.isSuccessful) {
-             val responseBody = response.body()
-             if (responseBody != null) {
-                 NetworkState.Success(responseBody)
-             } else {
-                 NetworkState.Error(response)
-             }
-         } else {
-             NetworkState.Error(response)
-         }*/
     }
 }
