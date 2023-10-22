@@ -12,7 +12,10 @@ data class User(
 
     val firstName: String,
 
-    val email: String
+    val email: String,
+
+    val job : String
+
 )
-fun DataItem.toDomain()  = User(lastName = lastName!!, id = id!!,avatar=avatar!!, firstName = firstName!!, email = email!!)
-fun UserEntities.toDomain() = User(lastName = lastName!!, id = id!!,avatar=avatar!!, firstName = firstName!!, email = email!!)
+fun DataItem.toDomain()  = User(lastName = lastName!!, id = id!!,avatar=avatar!!, firstName = firstName!!, email = email!!, job = "")
+fun UserEntities.toDomain() =  User(lastName = lastName!!, id = id!!,avatar=avatar!!, firstName = firstName!!, email = email!!, job = job!!)

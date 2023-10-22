@@ -16,4 +16,7 @@
     <string name="delete"> Eliminar </string>
     <string name="delete_message"> ¿Desea eliminar el usuario?</string>
     <string name="send_gmail"> Correo enviado</string>
+
+    <string name="advertencia"> ¡Advertencia!</string>
+    <string name="advertencia_create_user"> Puedes colocar cualquier formato de correo, pero si deseas recibir un correo debes poner un formato valido.</string>
 </resources>

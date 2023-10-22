@@ -9,26 +9,30 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.contacts.R
 import com.example.contacts.adapter.SwipeController
 import com.example.contacts.adapter.UserListAdapter
+import com.example.contacts.core.ApiState
 import com.example.contacts.core.email.AppExecutors
 import com.example.contacts.databinding.FragmentListaUserBinding
 import com.example.contacts.domain.model.User
-import com.example.contacts.ui.viewModel.delete.DeleteViewModel
-import com.example.contacts.ui.viewModel.list.UserListViewModel
+import com.example.contacts.ui.viewModel.data.delete.DeleteViewModel
+import com.example.contacts.ui.viewModel.data.list.UserListViewModel
 import com.example.contacts.utils.ConstantsUser.ID_USER
 import com.example.contacts.utils.Credenciales
 import com.example.contacts.utils.UtilsMessage
 import com.example.contacts.utils.ValidateEditText
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.mail.*
@@ -96,27 +100,47 @@ class ListaUserFragment : Fragment() {
             }
         }
         binding.recyclerPerson.adapter = adapterPerson
-        listUserViewModel.getUser.observe(this) {
-            adapterPerson.setData(it)
-            swipeToGesture(recyclerPerson = binding.recyclerPerson, items = it as ArrayList<User>)
+        listUserViewModel.getUserFlow()
+
+        lifecycleScope.launchWhenStarted {
+            listUserViewModel.userStateFlow.collect{apiState->
+                when(apiState){
+                    is ApiState.Loading->{
+                        binding.recyclerPerson.isVisible = false
+                        binding.progressDialog.isVisible = true
+                    }
+                    is ApiState.Failure->{
+                        binding.recyclerPerson.isVisible = false
+                        binding.progressDialog.isVisible = false
+                        Log.d(TAG,"OnCreate: ${apiState.msg}")
+                    }
+                    is ApiState.Success->{
+                        binding.recyclerPerson.isVisible = true
+                        binding.progressDialog.isVisible = false
+                        binding.txtSearch.addTextChangedListener {filter->
+                            val items = apiState.data.filter {user->
+                                user.firstName.lowercase().contains(filter.toString().lowercase())
+                            }
+                            adapterPerson.updateRecycler(items)
+                        }
+                        adapterPerson.setData(apiState.data)
+                        swipeToGesture(binding.recyclerPerson,apiState.data as ArrayList<User>)
+                        adapterPerson.notifyDataSetChanged()
+                    }
+                    is ApiState.Empty->{
+
+                    }
+                }
+            }
         }
-        listUserViewModel.getAllUser()
+
+
+
         binding.fab.setOnClickListener {
             val ft: FragmentTransaction = activity?.supportFragmentManager!!.beginTransaction()
             ft.replace(R.id.frameUser, fragment, "fragment_create_user")
             ft.addToBackStack(null)
             ft.commit()
-        }
-        searchUser()
-    }
-    private fun searchUser(){
-        binding.txtSearch.addTextChangedListener {filter->
-            listUserViewModel.getUser.observe(this){item->
-                val items = item.filter {
-                    it.firstName.lowercase().contains(filter.toString().lowercase())
-                }
-                adapterPerson.updateRecycler(items)
-            }
         }
     }
 
@@ -127,7 +151,6 @@ class ListaUserFragment : Fragment() {
                 try {
                     when(direction){
                         ItemTouchHelper.LEFT ->{
-                            //val deleteItem = items[position].id
                             val deleteItem = items[position].id
                             val builder = AlertDialog.Builder(requireContext())
                             builder.setTitle(getString(R.string.delete))
@@ -143,19 +166,6 @@ class ListaUserFragment : Fragment() {
                             }
                             val alertDialog = builder.create()
                             alertDialog.show()
-                            /*GlobalScope.launch {
-                                deleteViewModel.deleteUser(deleteItem)
-                            }
-                            adapterPerson.remoteUser(items,position)*/
-                          /*  GlobalScope.launch {
-
-                                deleteViewModel.deleteUser(deleteItem)
-                                //adapterPerson.updateRecycler(items)
-                            }*/
-                          /*  items.removeAt(position)
-                            adapterPerson.notifyItemRemoved(position)*/
-
-                            //Log.d("ID seleccionado",deleteItem.toString())
 
                         }
                         ItemTouchHelper.RIGHT ->{

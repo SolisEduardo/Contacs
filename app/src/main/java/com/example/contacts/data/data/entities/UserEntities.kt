@@ -16,6 +16,8 @@ data class UserEntities(
 
     @ColumnInfo("firstName") val firstName: String? = null,
 
-    @ColumnInfo("email") val email: String? = null
+    @ColumnInfo("email") val email: String? = null,
+
+    @ColumnInfo("job") val job : String? =null
 )
-fun User.toDataBase() =UserEntities(id = id,lastName = lastName, avatar = avatar, firstName = firstName, email = email)
+fun User.toDataBase() =UserEntities(id = id,lastName = lastName, avatar =  avatar, firstName = firstName, email = email, job = job)
