@@ -7,4 +7,7 @@ object ConstantsUser {
     const val sharedLogin: String = "MyShared"
     const val activeLogin: String = "active_login"
     const val rememberLogin: String = "remember_login"
+
+    const val sendEmail : String ="send_email"
+    const val sendPassword : String ="send_pass"
 }

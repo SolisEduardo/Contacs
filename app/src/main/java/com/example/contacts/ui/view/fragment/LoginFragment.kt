@@ -19,12 +19,14 @@ import com.example.contacts.R
 import com.example.contacts.data.remote.model.request.LoginRequest
 import com.example.contacts.databinding.FragmentLoginBinding
 import com.example.contacts.ui.view.activity.user.UserActivity
-import com.example.contacts.ui.viewModel.login.LoginViewModel
+import com.example.contacts.ui.viewModel.remote.login.LoginViewModel
 import com.example.contacts.utils.ConstantsUser
 import com.example.contacts.utils.ConstantsUser.activeLogin
 import com.example.contacts.utils.ConstantsUser.emailLogin
 import com.example.contacts.utils.ConstantsUser.passwordLogin
 import com.example.contacts.utils.ConstantsUser.rememberLogin
+import com.example.contacts.utils.ConstantsUser.sendEmail
+import com.example.contacts.utils.ConstantsUser.sendPassword
 import com.example.contacts.utils.UtilsMessage
 import com.example.contacts.utils.ValidateEditText
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,8 +59,9 @@ class LoginFragment : Fragment() {
         checkLogin(shared)
 
         binding.buttonLogin.setOnClickListener {
+            val edit = arrayOf(binding.editEmail,binding.editPassword)
             if(ValidateEditText.areEditTextsNotEmpty(binding.editEmail,binding.editPassword)){
-                if(ValidateEditText.doesNotContainEmoji(binding.editEmail)){
+                if(ValidateEditText.todosEditTextsSinEmojis(edit)){
                     val user = LoginRequest(password = binding.editPassword.text.toString(), email = binding.editEmail.text.toString())
                     loginViewModel.loginUser(user)
                 }else{
@@ -86,6 +89,7 @@ class LoginFragment : Fragment() {
             binding.progressDialog.isVisible = it
         }
         binding.txtRegister.setOnClickListener {
+            sendText(shared)
             val ft: FragmentTransaction = activity?.supportFragmentManager!!.beginTransaction()
             ft.replace(R.id.frameMain, fragment, "fragment_create_user")
             ft.addToBackStack(null)
@@ -97,6 +101,23 @@ class LoginFragment : Fragment() {
         if (shared.getString(activeLogin,"") == "true"){
             startActivity(Intent(activity, UserActivity::class.java))
             activity!!.finish()
+        }
+    }
+    private fun sendText(sp : SharedPreferences){
+        val email = binding.editEmail.text.toString()
+        val password = binding.editPassword.text.toString()
+        with(sp.edit()){
+            if (email.isEmpty() && password.isEmpty()){
+                putString(sendEmail,"")
+                putString(sendPassword,"")
+                apply()
+            }
+            else{
+                putString(sendEmail,email)
+                putString(sendPassword,password)
+                apply()
+            }
+
         }
     }
 

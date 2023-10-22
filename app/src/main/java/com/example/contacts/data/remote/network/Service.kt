@@ -2,8 +2,10 @@ package com.example.contacts.data.remote.network
 
 import android.util.Log
 import com.example.contacts.core.NetworkState
+import com.example.contacts.data.remote.model.request.CreateUserRequest
 import com.example.contacts.data.remote.model.request.LoginRequest
 import com.example.contacts.data.remote.model.request.RegisterRequest
+import com.example.contacts.data.remote.model.response.CreateUserResponse
 import com.example.contacts.data.remote.model.response.ListUserResponse
 import com.example.contacts.data.remote.model.response.LoginResponse
 import com.example.contacts.data.remote.model.response.RegisterResponse
@@ -30,6 +32,22 @@ class Service @Inject constructor(private val api : ApiService) {
     //Register
     suspend fun registerUser(request: RegisterRequest): NetworkState<RegisterResponse> {
         val response = api.registerUser(request)
+        Log.i(TAG, response.code().toString())
+        return if (response.isSuccessful) {
+            val responseBody = response.body()
+            if (responseBody != null) {
+                NetworkState.Success(responseBody)
+            } else {
+                NetworkState.Error(response)
+            }
+        } else {
+            NetworkState.Error(response)
+        }
+    }
+
+    //createUser
+    suspend fun createUser(createUserRequest: CreateUserRequest) :NetworkState< CreateUserResponse>{
+        val response = api.createUser(createUserRequest = createUserRequest)
         Log.i(TAG, response.code().toString())
         return if (response.isSuccessful) {
             val responseBody = response.body()

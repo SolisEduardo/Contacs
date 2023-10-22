@@ -16,7 +16,7 @@ import com.example.contacts.R
 import com.example.contacts.data.remote.model.request.RegisterRequest
 import com.example.contacts.databinding.FragmentRegisterBinding
 import com.example.contacts.ui.view.activity.user.UserActivity
-import com.example.contacts.ui.viewModel.register.RegisterViewModel
+import com.example.contacts.ui.viewModel.remote.register.RegisterViewModel
 import com.example.contacts.utils.ConstantsUser
 import com.example.contacts.utils.UtilsMessage
 import com.example.contacts.utils.ValidateEditText
@@ -47,6 +47,16 @@ class RegisterFragment : Fragment() {
             ConstantsUser.sharedLogin,
             Context.MODE_PRIVATE
         )
+        val email = shared.getString(ConstantsUser.sendEmail,"")
+        val pass = shared.getString(ConstantsUser.sendPassword,"")
+        if (email!!.isNotBlank() && pass!!.isNotBlank()) {
+            binding.editTextUsername.setText(email.toString())
+            binding.editTextPassword.setText(pass.toString())
+
+        }else{
+            binding.editTextUsername.setText("")
+            binding.editTextPassword.setText("")
+        }
         binding.buttonRegister.setOnClickListener {
             if (ValidateEditText.areEditTextsNotEmpty(
                     binding.editTextUsername,
@@ -90,6 +100,10 @@ class RegisterFragment : Fragment() {
         registerViewModel.isLoading.observe(this) {
             binding.progressDialog.isVisible = it
         }
+    }
+
+    private fun senRegister(shared: SharedPreferences){
+
     }
 
     private fun rememberUser(shared: SharedPreferences) {

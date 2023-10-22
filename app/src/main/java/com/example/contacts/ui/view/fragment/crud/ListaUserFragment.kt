@@ -24,8 +24,8 @@ import com.example.contacts.core.ApiState
 import com.example.contacts.core.email.AppExecutors
 import com.example.contacts.databinding.FragmentListaUserBinding
 import com.example.contacts.domain.model.User
-import com.example.contacts.ui.viewModel.delete.DeleteViewModel
-import com.example.contacts.ui.viewModel.list.UserListViewModel
+import com.example.contacts.ui.viewModel.data.delete.DeleteViewModel
+import com.example.contacts.ui.viewModel.data.list.UserListViewModel
 import com.example.contacts.utils.ConstantsUser.ID_USER
 import com.example.contacts.utils.Credenciales
 import com.example.contacts.utils.UtilsMessage

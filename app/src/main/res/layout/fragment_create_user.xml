@@ -78,12 +78,26 @@
             android:background="@drawable/blue_border"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"/>
+        <EditText
+            android:id="@+id/editTextJob"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:hint="Job"
+            android:padding="8dp"
+            android:drawablePadding="8dp"
+            android:textColorHint="#5C98DB"
+            android:layout_below="@id/editTextEmail"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/blue_border"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"/>
 
         <Button
             android:id="@+id/buttonAdd"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_below="@id/editTextEmail"
+            android:layout_below="@id/editTextJob"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="32dp"
             android:layout_marginTop="16dp"

@@ -13,9 +13,9 @@ import com.bumptech.glide.Glide
 import com.example.contacts.R
 import com.example.contacts.databinding.FragmentUpdateUserBinding
 import com.example.contacts.domain.model.User
-import com.example.contacts.ui.viewModel.delete.DeleteViewModel
-import com.example.contacts.ui.viewModel.search.SearchViewModel
-import com.example.contacts.ui.viewModel.update.UpdateUserViewModel
+import com.example.contacts.ui.viewModel.data.delete.DeleteViewModel
+import com.example.contacts.ui.viewModel.data.search.SearchViewModel
+import com.example.contacts.ui.viewModel.data.update.UpdateUserViewModel
 import com.example.contacts.utils.ConstantsUser
 import com.example.contacts.utils.ValidateEditText
 import dagger.hilt.android.AndroidEntryPoint
@@ -73,18 +73,24 @@ class UpdateUserFragment : Fragment() {
             binding.editTextFirtName.setText(searchViewModel.searchUser(id_user).firstName)
             binding.editTextLastName.setText(searchViewModel.searchUser(id_user).lastName)
             binding.editTextEmail.setText(searchViewModel.searchUser(id_user).email)
-            Log.i("INFO", searchViewModel.searchUser(id_user).toString())
+            val job = searchViewModel.searchUser(id_user).job
+            if (job.isNullOrEmpty()){
+                binding.editTextJob.setText("")
+            }
+            else{
+                binding.editTextJob.setText(job.toString())
+            }
         }
         binding.buttonUpdate.setOnClickListener {
-            if (ValidateEditText.areCreateUser(binding.editTextLastName,binding.editTextFirtName, binding.editTextEmail)){
-                if(ValidateEditText.isEditTextInGmailFormat(binding.editTextEmail.text.toString())){
+            if (ValidateEditText.areCreateUser(binding.editTextLastName,binding.editTextFirtName, binding.editTextEmail, binding.editTextJob)){
+                if(ValidateEditText.doesNotContainEmoji(binding.editTextEmail)){
                     GlobalScope.launch {
-                        val userUpdate = User(binding.editTextLastName.text.toString(),id_user,searchViewModel.searchUser(id_user).avatar,binding.editTextFirtName.text.toString(),binding.editTextEmail.text.toString())
-                        updateUserViewModel.updateUser(id_user = id_user, firstName = binding.editTextFirtName.text.toString(), lastName = binding.editTextLastName.text.toString(), email = binding.editTextEmail.text.toString() )
+                        val userUpdate = User(binding.editTextLastName.text.toString(),id_user,searchViewModel.searchUser(id_user).avatar,binding.editTextFirtName.text.toString(),binding.editTextEmail.text.toString(),"")
+                        updateUserViewModel.updateUser(id_user = id_user, firstName = binding.editTextFirtName.text.toString(), lastName = binding.editTextLastName.text.toString(), email = binding.editTextEmail.text.toString(), job = binding.editTextJob.text.toString() )
                     }
                     requireActivity().supportFragmentManager.popBackStack()
                 }else{
-                    Toast.makeText(requireContext(),getString(R.string.gmail_invalido),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(),getString(R.string.emojis),Toast.LENGTH_SHORT).show()
                 }
 
             }else{

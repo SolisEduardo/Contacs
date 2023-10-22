@@ -2,6 +2,7 @@ package com.example.contacts.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -12,8 +13,6 @@ import com.example.contacts.domain.model.User
 
 class UserListAdapter (private val context: Context, private val userClick: (String) -> Unit) : RecyclerView.Adapter<UserListAdapter.SearchViewHolder>(){
     private var personList: List<User> = emptyList()
-    // private var personTest : List<ListUserResponse> = emptyList()
-    private lateinit var testPerson : ListUserResponse
 
     fun setData(list: List<User>) {
         personList = list
@@ -58,6 +57,13 @@ class UserListAdapter (private val context: Context, private val userClick: (Str
         }
         else{
             Glide.with(holder.itemView.context).load(persons.avatar).into(binding.imgPerson)
+        }
+        if (persons.job.isEmpty() || persons.job.isBlank()){
+            binding.txtJob.visibility = View.GONE
+        }
+        else{
+            binding.txtJob.visibility = View.VISIBLE
+            binding.txtJob.text = "${persons.job}"
         }
         holder.itemView.setOnClickListener {
             userClick((persons.email))

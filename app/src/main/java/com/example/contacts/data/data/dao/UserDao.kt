@@ -24,8 +24,8 @@ interface UserDao {
     //delete user
     @Query("DELETE  FROM user_table WHERE id =:id")
     suspend fun deleteSpecificUser(id: Int)
-    @Query("UPDATE user_table SET firstName = :firstName, lastName = :lastName, email = :email WHERE id =:id")
-    suspend fun updateUser(id:Int,firstName: String?, lastName: String?, email:String?)
+    @Query("UPDATE user_table SET firstName = :firstName, lastName = :lastName, email = :email, job = :job WHERE id =:id")
+    suspend fun updateUser(id:Int,firstName: String?, lastName: String?, email:String?, job: String?)
 
     @Query("DELETE FROM user_table")
     suspend fun deleteAllUser()
