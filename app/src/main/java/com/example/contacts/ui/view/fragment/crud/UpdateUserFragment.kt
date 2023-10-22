@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.contacts.R
 import com.example.contacts.databinding.FragmentUpdateUserBinding
@@ -74,6 +75,13 @@ class UpdateUserFragment : Fragment() {
             binding.editTextLastName.setText(searchViewModel.searchUser(id_user).lastName)
             binding.editTextEmail.setText(searchViewModel.searchUser(id_user).email)
             val job = searchViewModel.searchUser(id_user).job
+            val avatar = searchViewModel.searchUser(id_user).avatar
+            if(avatar.isNotBlank() || avatar.isNotEmpty()){
+                Log.i("vacio",avatar.toString())
+                lifecycleScope.launch {
+                    Glide.with(this@UpdateUserFragment).load(avatar).into(binding.imageView)
+                }
+            }
             if (job.isNullOrEmpty()){
                 binding.editTextJob.setText("")
             }

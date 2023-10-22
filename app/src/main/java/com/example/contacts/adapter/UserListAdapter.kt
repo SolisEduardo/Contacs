@@ -53,7 +53,7 @@ class UserListAdapter (private val context: Context, private val userClick: (Str
         binding.txtName.text = "${persons.firstName} ${persons.lastName}"
         binding.txtEmail.text = "${persons.email}"
         if (persons.avatar == ""){
-            Glide.with(holder.itemView.context).load(R.drawable.ic_launcher_foreground).into(binding.imgPerson)
+            Glide.with(holder.itemView.context).load(R.drawable.hombre).into(binding.imgPerson)
         }
         else{
             Glide.with(holder.itemView.context).load(persons.avatar).into(binding.imgPerson)
