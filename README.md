@@ -18,6 +18,7 @@
 - Consume API REST JSON
 - Retrofit
 - Corrutinas
+- Flow
 - Room (CRUD)
 - Send correo Gmail
 - Uso de librerias
